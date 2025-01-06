@@ -8,23 +8,22 @@ library [signalsmith-stretch](https://github.com/Signalsmith-Audio/signalsmith-s
 - Stretches PCM audio data
 - Supports any sampling rate and number of channels
 
-## Installation
-
-```kotlin
-dependencies {
-    implementation(file("/path/to/jar"))
-}
-```
-
 ## Usage
 
 > See the [example](example) module for implementation details
 
-1. Load binaries
+1. Download latest [release](https://github.com/numq/stretch/releases)
+2. Add library dependency
+   ```kotlin
+   dependencies {
+       implementation(file("/path/to/jar"))
+   }
+   ```
+3. Load binaries
     ```kotlin
     Stretch.load(libstretch = "/path/to/libstretch")
     ```
-2. Instantiate a library
+4. Instantiate a library
     ```kotlin
     Stretch.create(sampleRate, channels, defaultPlaybackSpeedFactor)
     ```
