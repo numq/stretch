@@ -25,7 +25,7 @@ library [signalsmith-stretch](https://github.com/Signalsmith-Audio/signalsmith-s
     ```
 4. Instantiate a library
     ```kotlin
-    Stretch.create(sampleRate, channels, defaultPlaybackSpeedFactor)
+    Stretch.create(sampleRate = sampleRate, channels = channels, playbackSpeedFactor = defaultPlaybackSpeedFactor)
     ```
 
 ## Requirements
