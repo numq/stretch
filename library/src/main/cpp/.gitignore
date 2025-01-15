@@ -10,7 +10,7 @@
 *.app
 
 # CMake build directory
-cmake-build-*/
+cmake-build-debug/
 
 # CLion project files
 .idea/
