@@ -12,6 +12,9 @@
 # CMake build directory
 cmake-build-debug/
 
+# CMake release directory
+cmake-build-release/
+
 # CLion project files
 .idea/
 
