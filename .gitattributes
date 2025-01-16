@@ -1,2 +1,1 @@
-*.kt linguist-language=Kotlin
-*.kts linguist-language=Kotlin
+library/src/main/cpp/include/** linguist-vendored
