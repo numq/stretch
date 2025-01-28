@@ -12,12 +12,12 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env;
 
     if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_8) != JNI_OK) {
-        throw std::runtime_error("Failed to get JNI environment");
+        return JNI_ERR;
     }
 
     exceptionClass = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("java/lang/RuntimeException")));
     if (exceptionClass == nullptr) {
-        throw std::runtime_error("Failed to find java/lang/RuntimeException class");
+        return JNI_ERR;
     }
 
     return JNI_VERSION_1_8;
