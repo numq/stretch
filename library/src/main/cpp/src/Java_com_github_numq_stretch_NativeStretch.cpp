@@ -187,7 +187,7 @@ Java_com_github_numq_stretch_NativeStretch_processNative(JNIEnv *env, jclass thi
 
 JNIEXPORT void JNICALL
 Java_com_github_numq_stretch_NativeStretch_resetNative(JNIEnv *env, jclass thisClass, jlong handle) {
-    std::shared_lock<std::shared_mutex> lock(mutex);
+    std::unique_lock<std::shared_mutex> lock(mutex);
 
     try {
         auto it = pointers.find(handle);
@@ -203,7 +203,7 @@ Java_com_github_numq_stretch_NativeStretch_resetNative(JNIEnv *env, jclass thisC
 
 JNIEXPORT void JNICALL
 Java_com_github_numq_stretch_NativeStretch_freeNative(JNIEnv *env, jclass thisClass, jlong handle) {
-    std::shared_lock<std::shared_mutex> lock(mutex);
+    std::unique_lock<std::shared_mutex> lock(mutex);
 
     try {
         auto it = pointers.find(handle);
