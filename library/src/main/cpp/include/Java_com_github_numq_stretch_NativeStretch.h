@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <memory>
 #include "signalsmith-stretch.h"
+#include "deleter.h"
 
 #ifndef _Included_com_github_numq_stretch_NativeStretch
 #define _Included_com_github_numq_stretch_NativeStretch

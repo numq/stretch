@@ -2,10 +2,20 @@
 
 static jclass exceptionClass;
 static std::shared_mutex mutex;
-static std::unordered_map<jlong, std::unique_ptr<signalsmith::stretch::SignalsmithStretch<float>>> pointers;
+static std::unordered_map<jlong, stretch_ptr> pointers;
 
 void handleException(JNIEnv *env, const std::string &errorMessage) {
-    env->ThrowNew(exceptionClass, ("JNI ERROR: " + errorMessage).c_str());
+    env->ThrowNew(exceptionClass, errorMessage.c_str());
+}
+
+signalsmith::stretch::SignalsmithStretch<float> *getPointer(jlong handle) {
+    std::shared_lock<std::shared_mutex> lock(mutex);
+
+    auto it = pointers.find(handle);
+    if (it == pointers.end()) {
+        throw std::runtime_error("Invalid handle");
+    }
+    return it->second.get();
 }
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
@@ -38,18 +48,17 @@ Java_com_github_numq_stretch_NativeStretch_initNative(JNIEnv *env, jclass thisCl
     std::unique_lock<std::shared_mutex> lock(mutex);
 
     try {
-        auto stretch = std::make_unique<signalsmith::stretch::SignalsmithStretch<float>>();
-        if (!stretch) {
-            throw std::runtime_error("Failed to create native instance");
-        }
+        auto stretch = new signalsmith::stretch::SignalsmithStretch<float>();
 
-        auto handle = reinterpret_cast<jlong>(stretch.get());
+        stretch_ptr ptr(stretch);
 
-        pointers[handle] = std::move(stretch);
+        auto handle = reinterpret_cast<jlong>(ptr.get());
+
+        pointers[handle] = std::move(ptr);
 
         return handle;
     } catch (const std::exception &e) {
-        handleException(env, std::string("Exception in initNative method: ") + e.what());
+        handleException(env, e.what());
         return -1;
     }
 }
@@ -60,14 +69,11 @@ Java_com_github_numq_stretch_NativeStretch_getInputLatencyNative(JNIEnv *env, jc
     std::shared_lock<std::shared_mutex> lock(mutex);
 
     try {
-        auto it = pointers.find(handle);
-        if (it == pointers.end()) {
-            throw std::runtime_error("Invalid handle");
-        }
+        auto stretch = getPointer(handle);
 
-        return it->second->inputLatency();
+        return stretch->inputLatency();
     } catch (const std::exception &e) {
-        handleException(env, std::string("Exception in getInputLatencyNative method: ") + e.what());
+        handleException(env, e.what());
         return -1;
     }
 }
@@ -78,14 +84,11 @@ Java_com_github_numq_stretch_NativeStretch_getOutputLatencyNative(JNIEnv *env, j
     std::shared_lock<std::shared_mutex> lock(mutex);
 
     try {
-        auto it = pointers.find(handle);
-        if (it == pointers.end()) {
-            throw std::runtime_error("Invalid handle");
-        }
+        auto stretch = getPointer(handle);
 
-        return it->second->outputLatency();
+        return stretch->outputLatency();
     } catch (const std::exception &e) {
-        handleException(env, std::string("Exception in getOutputLatencyNative method: ") + e.what());
+        handleException(env, e.what());
         return -1;
     }
 }
@@ -97,14 +100,11 @@ Java_com_github_numq_stretch_NativeStretch_configureNative(JNIEnv *env, jclass t
     std::shared_lock<std::shared_mutex> lock(mutex);
 
     try {
-        auto it = pointers.find(handle);
-        if (it == pointers.end()) {
-            throw std::runtime_error("Invalid handle");
-        }
+        auto stretch = getPointer(handle);
 
-        it->second->configure(channels, blockSamples, intervalSamples);
+        stretch->configure(channels, blockSamples, intervalSamples);
     } catch (const std::exception &e) {
-        handleException(env, std::string("Exception in configureNative method: ") + e.what());
+        handleException(env, e.what());
     }
 }
 
@@ -115,10 +115,7 @@ Java_com_github_numq_stretch_NativeStretch_processNative(JNIEnv *env, jclass thi
     std::shared_lock<std::shared_mutex> lock(mutex);
 
     try {
-        auto it = pointers.find(handle);
-        if (it == pointers.end()) {
-            throw std::runtime_error("Invalid handle");
-        }
+        auto stretch = getPointer(handle);
 
         auto length = env->GetArrayLength(pcmBytes);
         if (length == 0) {
@@ -158,7 +155,7 @@ Java_com_github_numq_stretch_NativeStretch_processNative(JNIEnv *env, jclass thi
             outputPtrs[ch] = outputBuffers[ch].data();
         }
 
-        it->second->process(inputPtrs, inputSamples, outputPtrs, outputSamples);
+        stretch->process(inputPtrs, inputSamples, outputPtrs, outputSamples);
 
         std::vector<int16_t> outputInterleaved(outputSamples * channels);
         for (int i = 0; i < outputSamples; ++i) {
@@ -180,7 +177,7 @@ Java_com_github_numq_stretch_NativeStretch_processNative(JNIEnv *env, jclass thi
         return result;
 
     } catch (const std::exception &e) {
-        handleException(env, std::string("Exception in processNative method: ") + e.what());
+        handleException(env, e.what());
         return nullptr;
     }
 }
@@ -190,14 +187,11 @@ Java_com_github_numq_stretch_NativeStretch_resetNative(JNIEnv *env, jclass thisC
     std::unique_lock<std::shared_mutex> lock(mutex);
 
     try {
-        auto it = pointers.find(handle);
-        if (it == pointers.end()) {
-            throw std::runtime_error("Invalid handle");
-        }
+        auto stretch = getPointer(handle);
 
-        it->second.reset();
+        stretch->reset();
     } catch (const std::exception &e) {
-        handleException(env, std::string("Exception in resetNative method: ") + e.what());
+        handleException(env, e.what());
     }
 }
 
@@ -206,13 +200,10 @@ Java_com_github_numq_stretch_NativeStretch_freeNative(JNIEnv *env, jclass thisCl
     std::unique_lock<std::shared_mutex> lock(mutex);
 
     try {
-        auto it = pointers.find(handle);
-        if (it == pointers.end()) {
-            throw std::runtime_error("Invalid handle");
+        if (pointers.erase(handle) == 0) {
+            handleException(env, "Unable to free native pointer");
         }
-
-        pointers.erase(it);
     } catch (const std::exception &e) {
-        handleException(env, std::string("Exception in freeNative method: ") + e.what());
+        handleException(env, e.what());
     }
 }

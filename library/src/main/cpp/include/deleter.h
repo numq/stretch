@@ -3,12 +3,10 @@
 
 #include "signalsmith-stretch.h"
 
-struct SignalsmithStretchDeleter {
-    void operator()(signalsmith::stretch::SignalsmithStretch<float> *stretch) const {
-        if (stretch) {
-            stretch->reset();
-        }
-    }
+struct stretch_deleter {
+    void operator()(signalsmith::stretch::SignalsmithStretch<float> *stretch) { stretch->reset(); }
 };
+
+typedef std::unique_ptr<signalsmith::stretch::SignalsmithStretch<float>, stretch_deleter> stretch_ptr;
 
 #endif //STRETCH_DELETER_H
