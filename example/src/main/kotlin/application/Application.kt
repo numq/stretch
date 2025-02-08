@@ -19,14 +19,16 @@ import com.github.numq.stretch.Stretch
 import interaction.InteractionScreen
 import playback.PlaybackService
 
+const val APP_NAME = "Stretch"
+
 fun main() {
     val pathToBinaries = Thread.currentThread().getContextClassLoader().getResource("bin")?.file
 
     checkNotNull(pathToBinaries) { "Binaries not found" }
 
-    Stretch.load(libstretch = "$pathToBinaries\\libstretch.dll").getOrThrow()
+    Stretch.load(stretch = "$pathToBinaries\\stretch.dll").getOrThrow()
 
-    singleWindowApplication(state = WindowState(width = 512.dp, height = 512.dp)) {
+    singleWindowApplication(state = WindowState(width = 512.dp, height = 512.dp), title = APP_NAME) {
         val playbackService = remember { PlaybackService.create().getOrThrow() }
 
         val (throwable, setThrowable) = remember { mutableStateOf<Throwable?>(null) }

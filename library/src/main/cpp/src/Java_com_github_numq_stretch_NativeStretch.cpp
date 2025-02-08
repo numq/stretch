@@ -175,7 +175,6 @@ Java_com_github_numq_stretch_NativeStretch_processNative(JNIEnv *env, jclass thi
                                 reinterpret_cast<const jbyte *>(outputInterleaved.data()));
 
         return result;
-
     } catch (const std::exception &e) {
         handleException(env, e.what());
         return nullptr;

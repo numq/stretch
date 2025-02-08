@@ -3,6 +3,8 @@ project(stretch VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 23)
 
+set(CMAKE_SHARED_LIBRARY_PREFIX "")
+
 add_library(stretch SHARED src/Java_com_github_numq_stretch_NativeStretch.cpp)
 
 find_package(JNI)

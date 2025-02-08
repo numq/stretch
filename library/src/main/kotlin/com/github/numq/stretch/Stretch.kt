@@ -16,11 +16,11 @@ interface Stretch : AutoCloseable {
         /**
          * Loads the native library.
          *
-         * @param libstretch the path to the libstretch library.
+         * @param stretch the path to the `stretch` binary.
          * @return a [Result] indicating the success or failure of the operation.
          */
-        fun load(libstretch: String) = runCatching {
-            System.load(libstretch)
+        fun load(stretch: String) = runCatching {
+            System.load(stretch)
         }.onSuccess {
             isLoaded = true
         }
