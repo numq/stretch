@@ -21,11 +21,11 @@ library [signalsmith-stretch](https://github.com/Signalsmith-Audio/signalsmith-s
    ```
 3. Load binaries
     ```kotlin
-    Stretch.load(libstretch = "/path/to/libstretch")
+    Stretch.Signalsmith.load(libstretch = "/path/to/stretch-signalsmith")
     ```
 4. Instantiate a library
     ```kotlin
-    Stretch.create(sampleRate = sampleRate, channels = channels, playbackSpeedFactor = defaultPlaybackSpeedFactor)
+    Stretch.Signalsmith.create(sampleRate = sampleRate, channels = channels, playbackSpeedFactor = defaultPlaybackSpeedFactor)
     ```
 
 ## Requirements
