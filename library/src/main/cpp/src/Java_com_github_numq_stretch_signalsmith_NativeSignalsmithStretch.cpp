@@ -1,4 +1,4 @@
-#include "Java_com_github_numq_stretch_NativeStretch.h"
+#include "Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch.h"
 
 static jclass exceptionClass;
 static std::shared_mutex mutex;
@@ -44,7 +44,7 @@ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved) {
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_github_numq_stretch_NativeStretch_initNative(JNIEnv *env, jclass thisClass) {
+Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_initNative(JNIEnv *env, jclass thisClass) {
     std::unique_lock<std::shared_mutex> lock(mutex);
 
     try {
@@ -64,8 +64,8 @@ Java_com_github_numq_stretch_NativeStretch_initNative(JNIEnv *env, jclass thisCl
 }
 
 JNIEXPORT jint JNICALL
-Java_com_github_numq_stretch_NativeStretch_getInputLatencyNative(JNIEnv *env, jclass thisClass,
-                                                                 jlong handle) {
+Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_getInputLatencyNative(JNIEnv *env, jclass thisClass,
+                                                                                        jlong handle) {
     std::shared_lock<std::shared_mutex> lock(mutex);
 
     try {
@@ -79,8 +79,8 @@ Java_com_github_numq_stretch_NativeStretch_getInputLatencyNative(JNIEnv *env, jc
 }
 
 JNIEXPORT jint JNICALL
-Java_com_github_numq_stretch_NativeStretch_getOutputLatencyNative(JNIEnv *env, jclass thisClass,
-                                                                  jlong handle) {
+Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_getOutputLatencyNative(JNIEnv *env, jclass thisClass,
+                                                                                         jlong handle) {
     std::shared_lock<std::shared_mutex> lock(mutex);
 
     try {
@@ -94,9 +94,11 @@ Java_com_github_numq_stretch_NativeStretch_getOutputLatencyNative(JNIEnv *env, j
 }
 
 JNIEXPORT void JNICALL
-Java_com_github_numq_stretch_NativeStretch_configureNative(JNIEnv *env, jclass thisClass, jlong handle,
-                                                           jint channels,
-                                                           jint blockSamples, jint intervalSamples) {
+Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_configureNative(JNIEnv *env, jclass thisClass,
+                                                                                  jlong handle,
+                                                                                  jint channels,
+                                                                                  jint blockSamples,
+                                                                                  jint intervalSamples) {
     std::shared_lock<std::shared_mutex> lock(mutex);
 
     try {
@@ -109,9 +111,10 @@ Java_com_github_numq_stretch_NativeStretch_configureNative(JNIEnv *env, jclass t
 }
 
 JNIEXPORT jbyteArray JNICALL
-Java_com_github_numq_stretch_NativeStretch_processNative(JNIEnv *env, jclass thisClass, jlong handle,
-                                                         jbyteArray pcmBytes, jint channels,
-                                                         jfloat playbackSpeedFactor) {
+Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_processNative(JNIEnv *env, jclass thisClass,
+                                                                                jlong handle,
+                                                                                jbyteArray pcmBytes, jint channels,
+                                                                                jfloat playbackSpeedFactor) {
     std::shared_lock<std::shared_mutex> lock(mutex);
 
     try {
@@ -182,7 +185,8 @@ Java_com_github_numq_stretch_NativeStretch_processNative(JNIEnv *env, jclass thi
 }
 
 JNIEXPORT void JNICALL
-Java_com_github_numq_stretch_NativeStretch_resetNative(JNIEnv *env, jclass thisClass, jlong handle) {
+Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_resetNative(JNIEnv *env, jclass thisClass,
+                                                                              jlong handle) {
     std::unique_lock<std::shared_mutex> lock(mutex);
 
     try {
@@ -195,7 +199,8 @@ Java_com_github_numq_stretch_NativeStretch_resetNative(JNIEnv *env, jclass thisC
 }
 
 JNIEXPORT void JNICALL
-Java_com_github_numq_stretch_NativeStretch_freeNative(JNIEnv *env, jclass thisClass, jlong handle) {
+Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_freeNative(JNIEnv *env, jclass thisClass,
+                                                                             jlong handle) {
     std::unique_lock<std::shared_mutex> lock(mutex);
 
     try {

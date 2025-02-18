@@ -26,7 +26,7 @@ fun main() {
 
     checkNotNull(pathToBinaries) { "Binaries not found" }
 
-    Stretch.load(stretch = "$pathToBinaries\\stretch.dll").getOrThrow()
+    Stretch.Signalsmith.load(stretchSignalsmith = "$pathToBinaries\\stretch-signalsmith.dll").getOrThrow()
 
     singleWindowApplication(state = WindowState(width = 512.dp, height = 512.dp), title = APP_NAME) {
         val playbackService = remember { PlaybackService.create().getOrThrow() }

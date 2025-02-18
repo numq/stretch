@@ -1,8 +1,8 @@
-package com.github.numq.stretch
+package com.github.numq.stretch.signalsmith
 
 import java.lang.ref.Cleaner
 
-internal class NativeStretch : AutoCloseable {
+internal class NativeSignalsmithStretch : AutoCloseable {
     private val nativeHandle = initNative().also { handle ->
         require(handle != -1L) { "Unable to initialize native library" }
     }

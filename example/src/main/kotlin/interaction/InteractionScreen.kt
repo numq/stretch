@@ -47,7 +47,7 @@ fun InteractionScreen(playbackService: PlaybackService, handleThrowable: (Throwa
                 false
             )
 
-            Stretch.create(
+            Stretch.Signalsmith.create(
                 sampleRate = format.sampleRate.toInt(),
                 channels = format.channels,
                 defaultPlaybackSpeedFactor = playbackSpeedFactor
