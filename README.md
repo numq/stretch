@@ -3,6 +3,22 @@
 Audio stretching library for JVM based on the C++
 library [signalsmith-stretch](https://github.com/Signalsmith-Audio/signalsmith-stretch).
 
+### See also
+
+- [Voice Activity Detection](https://github.com/numq/voice-activity-detection) *to extract speech from audio*
+
+
+- [Speech recognition](https://github.com/numq/speech-recognition) *to transcribe audio to text*
+
+
+- [Speech generation](https://github.com/numq/speech-generation) *to generate voice audio from text*
+
+
+- [Text generation](https://github.com/numq/text-generation) *to generate text from prompt*
+
+
+- [Noise reduction](https://github.com/numq/noise-reduction) *to remove noise from audio*
+
 ## Features
 
 - Stretches PCM audio data
