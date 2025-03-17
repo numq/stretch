@@ -28,6 +28,8 @@ internal class SignalsmithStretch(
         )
     }
 
+    override suspend fun flush() = runCatching { nativeSignalsmithStretch.flush(channels = channels) }
+
     override suspend fun reset() = runCatching { nativeSignalsmithStretch.reset() }
 
     override fun close() = runCatching { nativeSignalsmithStretch.close() }.getOrDefault(Unit)

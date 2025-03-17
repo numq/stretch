@@ -33,6 +33,9 @@ internal class NativeSignalsmithStretch : AutoCloseable {
         ): ByteArray
 
         @JvmStatic
+        external fun flushNative(handle: Long, channels: Int)
+
+        @JvmStatic
         external fun resetNative(handle: Long)
 
         @JvmStatic
@@ -56,6 +59,8 @@ internal class NativeSignalsmithStretch : AutoCloseable {
         channels = channels,
         playbackSpeedFactor = playbackSpeedFactor
     )
+
+    fun flush(channels: Int) = flushNative(handle = nativeHandle, channels = channels)
 
     fun reset() = resetNative(handle = nativeHandle)
 

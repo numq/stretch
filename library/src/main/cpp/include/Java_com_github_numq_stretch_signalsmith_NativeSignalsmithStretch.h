@@ -28,6 +28,9 @@ JNIEXPORT void JNICALL Java_com_github_numq_stretch_signalsmith_NativeSignalsmit
 JNIEXPORT jbyteArray JNICALL Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_processNative
         (JNIEnv *, jclass, jlong, jbyteArray, jint, jfloat);
 
+JNIEXPORT void JNICALL Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_flushNative
+        (JNIEnv *, jclass, jlong, int channels);
+
 JNIEXPORT void JNICALL Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_resetNative
         (JNIEnv *, jclass, jlong);
 

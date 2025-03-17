@@ -52,6 +52,13 @@ interface Stretch : AutoCloseable {
     suspend fun process(pcmBytes: ByteArray): Result<ByteArray>
 
     /**
+     * Clears the internal buffers.
+     *
+     * @return A [Result] indicating success or failure of the reset operation.
+     */
+    suspend fun flush(): Result<Unit>
+
+    /**
      * Resets the internal state.
      *
      * @return A [Result] indicating success or failure of the reset operation.
@@ -79,8 +86,6 @@ interface Stretch : AutoCloseable {
             /**
              * Creates a new instance of [SignalsmithStretch] using the Signalsmith implementation.
              *
-             * This method initializes the Whisper speech recognition with the specified model.
-             *
              * @param sampleRate the sample rate of input data.
              * @param channels the number of input data channels.
              * @param defaultPlaybackSpeedFactor the default playback speed factor.
@@ -93,6 +98,10 @@ interface Stretch : AutoCloseable {
                 defaultPlaybackSpeedFactor: Float,
             ): Result<Signalsmith> = runCatching {
                 check(isLoaded) { "Native binaries were not loaded" }
+
+                require(sampleRate > 0) { "Sample rate must be greater than 0" }
+
+                require(channels > 0) { "Number of channels must be greater than 0" }
 
                 SignalsmithStretch(
                     sampleRate = sampleRate,

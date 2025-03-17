@@ -185,6 +185,24 @@ Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_processNative(
 }
 
 JNIEXPORT void JNICALL
+Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_flushNative(JNIEnv *env, jclass thisClass,
+                                                                              jlong handle, int channels) {
+    std::unique_lock<std::shared_mutex> lock(mutex);
+
+    try {
+        auto stretch = getPointer(handle);
+
+        int outputSamples = stretch->outputLatency();
+
+        std::vector<std::vector<float>> outputBuffers(channels, std::vector<float>(outputSamples, 0.0f));
+
+        stretch->flush(outputBuffers, outputSamples);
+    } catch (const std::exception &e) {
+        handleException(env, e.what());
+    }
+}
+
+JNIEXPORT void JNICALL
 Java_com_github_numq_stretch_signalsmith_NativeSignalsmithStretch_resetNative(JNIEnv *env, jclass thisClass,
                                                                               jlong handle) {
     std::unique_lock<std::shared_mutex> lock(mutex);
